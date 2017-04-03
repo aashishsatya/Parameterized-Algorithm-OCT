@@ -7,6 +7,10 @@ Created on Sun Feb 12 12:25:31 2017
 A script having a set of simple functions to check graph properties.
 
 """
+import sys
+
+color_dict = {}
+visited = []
 
 class UndirectedGraph:
     
@@ -99,3 +103,56 @@ def get_induced_subgraph(graph, subset):
 	#print new_graph_vertices					
 	#print new_graph_edge
 	return UndirectedGraph(new_graph_vertices, new_graph_edge)
+	
+def get_bipartite_partition(graph):
+	global visited
+	global color_dict
+	#assumes graph is bipartite
+	#return partition 1, partition 2
+	#color is 'red' or 'blue'
+	if(len(graph.V) <= 0):
+		print "Empty graph!"
+		sys.exit(1)	
+	#call dfs
+	visited = []
+	for vertex in graph.V:
+		if vertex not in visited:
+			#color it red
+			color_dict[vertex]='red'
+			dfs(graph,vertex)
+
+	#return red parition and blue partition
+	red_partition = set()
+	
+	for vertex, color in color_dict.items():
+		if color == 'red':
+			red_partition.add(vertex)
+			
+	blue_partition = set()
+	for vertex, color in color_dict.items():
+		if color == 'blue':
+			blue_partition.add(vertex)
+	
+	return red_partition, blue_partition
+	
+	
+	
+def dfs(graph, start):
+	
+	global color_dict
+	global visited
+	visited = visited + [start]
+	for node in graph.E[start]:
+		#if visited
+		if node in visited:
+			#if colored the same
+			if color_dict[node] == color_dict[start]:
+				print "Not Bipartite"
+				sys.exit(1)
+		else:
+			if color_dict[start]=='red':
+				color_dict[node] = 'blue'
+			else:
+				color_dict[node] = 'red'				
+			dfs(graph, node)
+			

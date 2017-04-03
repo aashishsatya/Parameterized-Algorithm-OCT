@@ -18,7 +18,5 @@ subset = vertices[0: k + 2]
 
 new_graph = get_induced_subgraph(graph, set(subset))
 
-print new_graph.V					
-print len(new_graph.V)					
-print new_graph.E
+
 		

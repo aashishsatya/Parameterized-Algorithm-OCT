@@ -4,7 +4,6 @@
 # Ford-Fulkerson algorithm computes max flow in a flow network.
 #
 
-
 class Edge(object):
   def __init__(self, u, v, w):
     self.source = u
@@ -64,17 +63,41 @@ class FlowNetwork(object):
         print '%s:%s' % (key,self.flow[key])
       path = self.FindPath(source, target, [])
       print 'path inside of while loop: %s' % path
+    print "matched vertices:"
+    pairs = []
     for key in self.flow:
-      print '%s:%s' % (key,self.flow[key])
-    return sum(self.flow[edge] for edge in self.GetEdges(source))
+      if (key.source!=source) and (key.target!=target) and (key.capacity==self.flow[key]) and (key.capacity != 0):
+		  print key
+		  key_str = str(key)
+		  key_str_split = key_str.split('->')
+		  left = key_str_split[0]
+		  right = key_str_split[1].split(':')[0]
+		  pairs.append((left, right))
+    return pairs, (sum(self.flow[edge] for edge in self.GetEdges(source)))
 	
 	
-#if __name__ == "__main__":
-  #g = FlowNetwork()
-  #map(g.AddVertex, ['s', 'o', 'p', 't'])
-  #g.AddEdge('s', 'o', 1)
-  #g.AddEdge('s', 'p', 1)
-  #g.AddEdge('o', 'p', 1)
-  #g.AddEdge('o', 't', 1)
-  #g.AddEdge('p', 't', 1)
-#print g.MaxFlow('s', 't')
+	
+if __name__ == "__main__":
+	g = FlowNetwork()
+	map(g.AddVertex, ['0', '1', '2', '3','4','5','6','7','8','9'])
+	g.AddEdge('0','5',1);
+	g.AddEdge('0','6',1);
+	g.AddEdge('0','8',1);
+	g.AddEdge('1','5',1);
+	g.AddEdge('1','6',1);
+	g.AddEdge('2','5',1);
+	g.AddEdge('2','7',1);
+	g.AddEdge('2','8',1);
+	g.AddEdge('3','6',1);
+	g.AddEdge('3','9',1);
+	g.AddEdge('4','6',1);
+	g.AddEdge('4','9',1);
+	
+	g.AddVertex('s')
+	g.AddVertex('t')
+	for u in xrange(0,5):
+		g.AddEdge('s',str(u),1)
+	for v in xrange(5,10):
+		g.AddEdge(str(v),'t',1)
+	
+	print g.MaxFlow('s', 't')
